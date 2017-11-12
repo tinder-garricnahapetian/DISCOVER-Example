@@ -12,12 +12,18 @@ class WelcomeFlow {
 
     var didFinish: EmptyClosure?
 
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = UserDefaults.standard) {
+        self.defaults = defaults
+    }
+
     func start(with viewController: UIViewController) {
         let welcomeVC: WelcomeVC = .init()
         viewController.present(welcomeVC, animated: true, completion: nil)
         welcomeVC.didTapGetStarted = {
-            UserDefaults.standard.set(true, forKey: .hasFinishedWelcomeFlow)
             viewController.dismiss(animated: true, completion: nil)
+            self.defaults.set(true, forKey: .hasFinishedWelcomeFlow)
             self.didFinish?()
         }
     }
