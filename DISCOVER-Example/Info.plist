@@ -39,5 +39,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>hasFinishedWelcomeFlow</key>
+	<false/>
 </dict>
 </plist>

@@ -11,20 +11,20 @@ import UIKit
 class AuthFlow {
     var didFinish: ((String) -> Void)?
 
-    var context: AuthContext?
-
-    func start(with rootViewController: UIViewController) {
-        let authVC = AuthVC()
-        context = AuthContext.init(credentialProvider: authVC)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            rootViewController.present(authVC, animated: true, completion: nil)
-        }
-
-        context?.didFinish = { token in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                rootViewController.dismiss(animated: true, completion: nil)
-                self.didFinish?(token)
+    func start(with rootView: UIViewController) {
+        let view = AuthVC()
+        let context = AuthContext()
+        view.didProvide = { username, password in
+            context.authenticate(with: username, password) { result in
+                switch result {
+                case .success(let token):
+                    rootView.dismiss(animated: true, completion: nil)
+                    self.didFinish?(token)
+                case .failure(let error):
+                    view.didProvideInvalidCredentials(error: error)
+                }
             }
         }
+        rootView.present(view, animated: true, completion: nil)
     }
 }

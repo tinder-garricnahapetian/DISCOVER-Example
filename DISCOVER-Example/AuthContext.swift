@@ -8,52 +8,33 @@
 
 import Foundation
 
-protocol CredentialProvider: class {
-    typealias Username = String
-    typealias Password = String
-    var onDidProvide: ((Username, Password) -> Void)? { get set }
-    func didProvideInvalidCredentials(error: Error)
-}
-
 class AuthContext {
     typealias Token = String
     var didFinish: ((Token) -> Void)?
 
-    private let credentialProvider: CredentialProvider
-
-    init(credentialProvider: CredentialProvider) {
-        self.credentialProvider = credentialProvider
-        setup()
+    enum AuthError: Swift.Error {
+        case invalidUsername
+        case invalidPassword
+        case invalidCredential
     }
 
-    private func setup() {
-        credentialProvider.onDidProvide = { username, password in
-            guard let username = Username.init(rawValue: username) else {
-                return
-            }
-
-            guard let password = Password.init(rawValue: password) else {
-                return
-            }
-
-            let credential = Credential.init(username: username, password: password)
-
-            self.login(with: credential, completion: self.parseResult)
+    func authenticate(with username: String, _ password: String, completion: @escaping (Result) -> Void) {
+        guard let username = Username.init(rawValue: username) else {
+            completion(.failure(error: AuthError.invalidUsername))
+            return
         }
-    }
 
-    private func login(with credentials: Credential, completion: (Result) -> Void) {
-        // perform asyn code
+        guard let password = Password.init(rawValue: password) else {
+            completion(.failure(error: AuthError.invalidPassword))
+            return
+        }
+
+        guard let _ = Credential(username: username, password: password) else {
+            completion(.failure(error: AuthError.invalidCredential))
+            return
+        }
+        // perform async task
         completion(.success(token: "successToken"))
-    }
-
-    private func parseResult(result: Result) {
-        switch result {
-        case .success(let token):
-            didFinish?(token)
-        case .failure(let error):
-            credentialProvider.didProvideInvalidCredentials(error: error)
-        }
     }
 }
 
@@ -65,12 +46,17 @@ enum Result {
 struct Credential {
     let username: Username
     let password: Password
-
+    init?(username: Username, password: Password) {
+        // perform local validation
+        self.username = username
+        self.password = password
+    }
 }
 
 struct Username {
     let rawValue: String
     init?(rawValue: String) {
+        // perform local validation
         self.rawValue = rawValue
     }
 }
@@ -78,6 +64,7 @@ struct Username {
 struct Password {
     let rawValue: String
     init?(rawValue: String) {
+        // perform local validation
         self.rawValue = rawValue
     }
 }

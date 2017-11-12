@@ -8,32 +8,40 @@
 
 import UIKit
 
-typealias LaunchOptions = [UIApplicationLaunchOptionsKey: Any]?
-
 class AppContext {
 
     enum State {
-        case none
+        case welcome
         case auth
-        case onboarding // onboarding before session? what about onboarding after session? what about new feature tours?
-        case whatsNew
         case session(String)
     }
 
-    private(set) var state: State = .none
+    private(set) lazy var state: State = {
+        return determineAppState()
+    }()
+
     private let launchReason: LaunchReason
 
+    private var hasFinishedWelcomeFlow: Bool {
+        return UserDefaults.standard.bool(forKey: .hasFinishedWelcomeFlow)
+    }
+
     init(launchOptions: LaunchOptions) {
-        self.launchReason = LaunchReason.init(launchOptions: launchOptions)
-        self.state = .auth
+        self.launchReason = LaunchReason(launchOptions: launchOptions)
+    }
+
+    private func determineAppState() -> State {
+        switch launchReason {
+        case .normal:
+            if hasFinishedWelcomeFlow {
+                return .auth
+            } else {
+                return .welcome
+            }
+        }
     }
 }
 
-enum LaunchReason {
-    case normal
-    case location
-
-    init(launchOptions: LaunchOptions) {
-        self = .normal
-    }
+extension String {
+    static let hasFinishedWelcomeFlow = "hasFinishedWelcomeFlow"
 }
