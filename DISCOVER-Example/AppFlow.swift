@@ -14,13 +14,29 @@ typealias Token = String
 
 class AppFlow {
 
-    let rootViewController: AppVC = .init()
+    let context: AppContext
+    let window: UIWindow
+
+    private var rootViewController: UIViewController {
+        return window.rootViewController!
+    }
 
     private lazy var welcomeFlow = WelcomeFlow()
     private lazy var authFlow = AuthFlow()
     private lazy var sessionFlow = SessionFlow()
 
-    func start(with context: AppContext) {
+    init(context: AppContext, window: UIWindow?) {
+        self.context = context
+        self.window = window ?? .init()
+    }
+
+    func didFinishLaunching() -> Bool {
+        window.rootViewController = AppVC()
+        window.makeKeyAndVisible()
+        return didStartSubFlow()
+    }
+
+    private func didStartSubFlow() -> Bool {
         switch context.state {
         case .welcome:
             startWelcomeFlow()
@@ -29,6 +45,7 @@ class AppFlow {
         case .session(let token):
             startSessionFlow(withToken: token)
         }
+        return true
     }
 
     private func startWelcomeFlow() {

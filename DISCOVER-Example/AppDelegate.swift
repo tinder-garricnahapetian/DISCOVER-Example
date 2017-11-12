@@ -11,14 +11,13 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow? = UIWindow()
+    var window: UIWindow?
 
-    private let appFlow: AppFlow = .init()
+    private var appFlow: AppFlow!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: LaunchOptions) -> Bool {
-        window?.rootViewController = appFlow.rootViewController
-        window?.makeKeyAndVisible()
-        appFlow.start(with: AppContext(launchOptions: launchOptions))
-        return true
+        let context = AppContext(application: application, launchOptions: launchOptions)
+        appFlow = AppFlow(context: context, window: window)
+        return appFlow.didFinishLaunching()
     }
 }
