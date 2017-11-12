@@ -9,7 +9,7 @@
 import Foundation
 
 class AuthContext {
-    typealias Token = String
+
     var didFinish: ((Token) -> Void)?
 
     enum AuthError: Swift.Error {

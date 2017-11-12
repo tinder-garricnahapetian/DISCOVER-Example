@@ -10,6 +10,7 @@ import UIKit
 
 typealias LaunchOptions = [UIApplicationLaunchOptionsKey: Any]?
 typealias EmptyClosure = (() -> Void)
+typealias Token = String
 
 class AppFlow {
 
@@ -44,7 +45,7 @@ class AppFlow {
         }
     }
 
-    private func startSessionFlow(withToken token: String) {
+    private func startSessionFlow(withToken token: Token) {
         let vc = UIViewController()
         vc.view.backgroundColor = .green
         rootViewController.present(vc, animated: true, completion: nil)
