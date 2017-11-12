@@ -9,22 +9,28 @@
 import UIKit
 
 class AuthFlow {
+
     var didFinish: ((String) -> Void)?
+
+    private let context: AuthContext
+
+    init(context: AuthContext = .init()) {
+        self.context = context
+    }
 
     func start(with rootView: UIViewController) {
         let view = AuthVC()
-        let context = AuthContext()
+        rootView.present(view, animated: true, completion: nil)
         view.didProvide = { username, password in
-            context.authenticate(with: username, password) { result in
+            self.context.authenticate(with: username, password) { result in
                 switch result {
                 case .success(let token):
-                    rootView.dismiss(animated: true, completion: nil)
+                    view.dismiss(animated: true, completion: nil)
                     self.didFinish?(token)
                 case .failure(let error):
                     view.didProvideInvalidCredentials(error: error)
                 }
             }
         }
-        rootView.present(view, animated: true, completion: nil)
     }
 }
