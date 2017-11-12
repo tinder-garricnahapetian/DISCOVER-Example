@@ -20,13 +20,17 @@ class AppContext {
         return determineAppState()
     }()
 
+    private let application: UIApplication
+    private let launchOptions: LaunchOptions
     private let launchReason: LaunchReason
 
     private var hasFinishedWelcomeFlow: Bool {
         return UserDefaults.standard.bool(forKey: .hasFinishedWelcomeFlow)
     }
 
-    init(launchOptions: LaunchOptions) {
+    init(application: UIApplication, launchOptions: LaunchOptions) {
+        self.application = application
+        self.launchOptions = launchOptions
         self.launchReason = LaunchReason(launchOptions: launchOptions)
     }
 
