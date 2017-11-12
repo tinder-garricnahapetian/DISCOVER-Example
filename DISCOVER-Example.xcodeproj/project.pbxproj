@@ -56,7 +56,6 @@
 		4E46CAFD1FB5490700B3791E = {
 			isa = PBXGroup;
 			children = (
-				4E5AB33D1FB8146100104C68 /* SessionFlow.swift */,
 				4E46CB081FB5490800B3791E /* DISCOVER-Example */,
 				4E46CB071FB5490800B3791E /* Products */,
 			);
@@ -75,14 +74,15 @@
 			children = (
 				4E46CB151FB5490800B3791E /* Info.plist */,
 				4E312E841FB63B320043FEA0 /* AppContext.swift */,
-				4E5AB33B1FB8140A00104C68 /* LaunchReason.swift */,
 				4E46CB091FB5490800B3791E /* AppDelegate.swift */,
-				4E5AB3371FB8127100104C68 /* AuthView.swift */,
 				4E312E861FB63B740043FEA0 /* AppFlow.swift */,
 				4E312E821FB63AE70043FEA0 /* AppVC.swift */,
 				4E312E8A1FB63BBF0043FEA0 /* AuthContext.swift */,
 				4E312E881FB63BA00043FEA0 /* AuthFlow.swift */,
 				4E312E8C1FB63BF50043FEA0 /* AuthVC.swift */,
+				4E5AB3371FB8127100104C68 /* AuthView.swift */,
+				4E5AB33B1FB8140A00104C68 /* LaunchReason.swift */,
+				4E5AB33D1FB8146100104C68 /* SessionFlow.swift */,
 				4E8323091FB67C0C0033A8B5 /* WelcomeFlow.swift */,
 				4E5AB3391FB813BF00104C68 /* WelcomeVC.swift */,
 				4E46CB101FB5490800B3791E /* Assets.xcassets */,
